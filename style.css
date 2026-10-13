@@ -194,18 +194,27 @@ section { padding: 56px 0; border-top: 1px solid var(--divider); }
   margin-top: 14px;
 }
 
-/* Temalar */
+/* Temalar: kartlar sekme, altta temanın kendi renginde sahne */
 .themes {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 14px;
 }
 .theme {
+  appearance: none;
+  font: inherit;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
   background: var(--surface);
-  border: 1px solid var(--border);
+  border: 2px solid var(--border);
   border-radius: 20px;
-  padding: 10px 10px 16px;
+  padding: 9px 9px 15px;
+  transition: border-color .2s, transform .2s;
 }
+.theme:hover { transform: translateY(-2px); }
+.theme[aria-selected="true"] { border-color: var(--accent); }
+.theme:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; }
 .theme .art {
   border-radius: 14px;
   aspect-ratio: 4 / 3;
@@ -216,7 +225,69 @@ section { padding: 56px 0; border-top: 1px solid var(--divider); }
 }
 .theme .art img { width: 100%; height: 100%; object-fit: contain; }
 .theme strong { display: block; padding: 0 6px; font-size: 17px; }
-.theme span { display: block; padding: 0 6px; color: var(--ink2); font-size: 14px; }
+.theme .sub { display: block; padding: 0 6px; color: var(--ink2); font-size: 14px; }
+
+/* Sahne renkleri ve yazı tipleri uygulamanın temalarından (ThemeCatalog.swift) */
+.stage[data-theme="cini"]    { --s-bg: #F6F5F0; --s-ink: #14213D; --s-ink2: #4F5B70; --s-accent: #1F4E9C; --s-line: #E4E2D8; --s-font: "DM Serif Display", Georgia, serif; --s-weight: 400; }
+.stage[data-theme="cinar"]   { --s-bg: #EEF2EA; --s-ink: #15241D; --s-ink2: #4F5D54; --s-accent: #1D4D35; --s-line: #DCE5D8; --s-font: "Bricolage Grotesque", sans-serif; --s-weight: 800; }
+.stage[data-theme="ebru"]    { --s-bg: #F3EEE4; --s-ink: #22223A; --s-ink2: #56536A; --s-accent: #2B3A67; --s-line: #DCD2BF; --s-font: "Fraunces", Georgia, serif; --s-weight: 600; }
+.stage[data-theme="mahalle"] { --s-bg: #F2EEE6; --s-ink: #23201D; --s-ink2: #57514B; --s-accent: #8C3A2F; --s-line: #E5DDD0; --s-font: "Baloo 2", sans-serif; --s-weight: 800; }
+.stage[data-theme="vapur"]   { --s-bg: #0F2B45; --s-ink: #EEF4F8; --s-ink2: #B4C7D6; --s-accent: #F0C46E; --s-line: #24507A; --s-font: "Archivo", sans-serif; --s-weight: 800; }
+
+.stage {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 320px);
+  gap: 40px;
+  align-items: center;
+  padding: 40px 48px;
+  border-radius: 28px;
+  background: var(--s-bg);
+  color: var(--s-ink);
+  border: 1px solid var(--s-line);
+  transition: background-color .45s ease, color .45s ease, border-color .45s ease;
+}
+.stage-kicker {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--s-ink2);
+}
+.stage-title {
+  font-family: var(--s-font);
+  font-weight: var(--s-weight);
+  font-size: clamp(40px, 5vw, 60px);
+  color: var(--s-ink);
+}
+.stage-names { margin: 24px 0 0; display: grid; gap: 0; max-width: 26em; }
+.stage-names div {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 0;
+  border-top: 1px solid var(--s-line);
+}
+.stage-names dt { color: var(--s-ink2); font-weight: 600; }
+.stage-names dd { margin: 0; font-weight: 700; color: var(--s-accent); text-align: right; }
+.stage-phone { max-width: 300px; width: 100%; }
+.screens { position: relative; aspect-ratio: 739 / 1600; border-radius: 27px; overflow: hidden; }
+.screens img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 27px;
+  opacity: 0;
+  transition: opacity .4s ease;
+}
+.screens img.active { opacity: 1; }
+
+@media (prefers-reduced-motion: reduce) {
+  .theme, .stage, .screens img { transition: none; }
+  .theme:hover { transform: none; }
+}
 
 /* Durum */
 .status {
@@ -253,19 +324,26 @@ footer {
 footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
 
 /* Grid öğeleri içerikleri (büyük ekran görüntüleri) yüzünden sütunu genişletmesin. */
-.hero > *, .steps > *, .shots > *, .themes > *, .status > * { min-width: 0; }
+.hero > *, .steps > *, .shots > *, .themes > *, .status > *, .stage > * { min-width: 0; }
 
 /* Dar ekranlar */
 @media (max-width: 860px) {
   .hero { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-top: 24px; }
   .steps, .status { grid-template-columns: minmax(0, 1fr); }
-  .themes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .themes { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 8px; }
+  .theme { padding: 5px 5px 9px; border-radius: 16px; }
+  .theme .art { border-radius: 11px; aspect-ratio: 1; margin-bottom: 7px; }
+  .theme strong { padding: 0 2px; font-size: 14px; }
+  .theme .sub { display: none; }
   .shots { grid-template-columns: minmax(0, 1fr); }
+  .stage { grid-template-columns: minmax(0, 1fr); gap: 24px; padding: 26px 22px 30px; }
+  .stage-phone { margin: 0 auto; }
 }
 @media (max-width: 480px) {
   body { font-size: 16px; }
   .wrap { padding: 0 16px; }
   .top nav { gap: 12px; }
   .top nav a { font-size: 14px; }
-  .themes { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .themes { gap: 6px; }
+  .theme strong { font-size: 12px; }
 }
