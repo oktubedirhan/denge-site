@@ -1,0 +1,271 @@
+/* Denge tanıtım sitesi — renkler uygulamanın Çini temasından (ThemeCatalog.swift). */
+
+:root {
+  --bg: #F6F5F0;
+  --surface: #FFFFFF;
+  --border: #E4E2D8;
+  --divider: #EEECE4;
+  --ink: #14213D;
+  --ink2: #4F5B70;
+  --accent: #1F4E9C;
+  --on-accent: #FFFFFF;
+  --soft: #E7ECF4;
+  --teal: #2A9D9A;
+  --note-ink: #7E241C;
+  --note-bg: #F7E1DE;
+  --shadow: 0 18px 40px -22px rgba(20, 33, 61, 0.35);
+  --display: "DM Serif Display", Georgia, serif;
+  --body: "Figtree", -apple-system, "Segoe UI", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Çini'nin "Fırın" (odak) paleti */
+    --bg: #1C1714;
+    --surface: #2B211C;
+    --border: #4A3A30;
+    --divider: #3A2C24;
+    --ink: #F7EFE6;
+    --ink2: #C9B6A6;
+    --accent: #F2C59A;
+    --on-accent: #1C1714;
+    --soft: #3A2C24;
+    --teal: #7FD1CE;
+    --note-ink: #F7EFE6;
+    --note-bg: #4A3A30;
+    --shadow: 0 18px 40px -22px rgba(0, 0, 0, 0.7);
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.55;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--accent); }
+
+.wrap {
+  max-width: 1040px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Üst çubuk */
+.top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 18px 0;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--ink);
+  text-decoration: none;
+  font-family: var(--display);
+  font-size: 26px;
+}
+.brand img {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: #F6F5F0;
+  padding: 3px;
+}
+.top nav { display: flex; gap: 18px; flex-wrap: wrap; }
+.top nav a {
+  color: var(--ink2);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 15px;
+}
+.top nav a:hover { color: var(--ink); }
+
+/* Giriş */
+.hero {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  gap: 48px;
+  align-items: center;
+  padding: 40px 0 72px;
+}
+.kicker {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--ink2);
+  margin: 0 0 12px;
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 400; line-height: 1.1; margin: 0; }
+h1 { font-size: clamp(40px, 6vw, 64px); letter-spacing: -0.01em; }
+h2 { font-size: clamp(30px, 4vw, 42px); }
+h3 { font-size: 24px; }
+.lead {
+  font-size: 19px;
+  color: var(--ink2);
+  margin: 18px 0 26px;
+  max-width: 34em;
+}
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: var(--soft);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 14px;
+}
+.pill::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--teal);
+}
+
+/* Telefon ekran görüntüsü */
+.phone {
+  border-radius: 34px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  padding: 8px;
+  box-shadow: var(--shadow);
+  max-width: 320px;
+  margin: 0 auto;
+}
+.phone img { border-radius: 27px; }
+
+/* Bölümler */
+section { padding: 56px 0; border-top: 1px solid var(--divider); }
+.section-head { max-width: 40em; margin-bottom: 32px; }
+.section-head p { color: var(--ink2); margin: 12px 0 0; }
+
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 22px;
+}
+.card .num {
+  display: inline-grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 800;
+  margin-bottom: 14px;
+}
+.card p { color: var(--ink2); margin: 10px 0 0; font-size: 16px; }
+
+.shots {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-top: 40px;
+}
+.shots figure { margin: 0; }
+.shots .phone { max-width: 260px; }
+.shots figcaption {
+  text-align: center;
+  color: var(--ink2);
+  font-size: 15px;
+  margin-top: 14px;
+}
+
+/* Temalar */
+.themes {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+}
+.theme {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  padding: 10px 10px 16px;
+}
+.theme .art {
+  border-radius: 14px;
+  aspect-ratio: 4 / 3;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.theme .art img { width: 100%; height: 100%; object-fit: contain; }
+.theme strong { display: block; padding: 0 6px; font-size: 17px; }
+.theme span { display: block; padding: 0 6px; color: var(--ink2); font-size: 14px; }
+
+/* Durum */
+.status {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.status ul { margin: 12px 0 0; padding-left: 20px; color: var(--ink2); }
+.status li { margin: 6px 0; }
+.note {
+  background: var(--note-bg);
+  color: var(--note-ink);
+  border-radius: 16px;
+  padding: 14px 18px;
+  font-weight: 600;
+  margin-top: 16px;
+}
+
+/* Metin sayfası (gizlilik) */
+.prose { max-width: 40em; padding: 24px 0 64px; }
+.prose h1 { font-size: clamp(36px, 5vw, 52px); }
+.prose h2 { font-size: 26px; margin-top: 36px; }
+.prose p, .prose li { color: var(--ink2); }
+.prose strong { color: var(--ink); }
+.prose .meta { color: var(--ink2); font-size: 15px; margin-top: 10px; }
+
+/* Alt bilgi */
+footer {
+  border-top: 1px solid var(--divider);
+  padding: 28px 0 40px;
+  color: var(--ink2);
+  font-size: 14px;
+}
+footer .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+/* Grid öğeleri içerikleri (büyük ekran görüntüleri) yüzünden sütunu genişletmesin. */
+.hero > *, .steps > *, .shots > *, .themes > *, .status > * { min-width: 0; }
+
+/* Dar ekranlar */
+@media (max-width: 860px) {
+  .hero { grid-template-columns: minmax(0, 1fr); gap: 36px; padding-top: 24px; }
+  .steps, .status { grid-template-columns: minmax(0, 1fr); }
+  .themes { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .shots { grid-template-columns: minmax(0, 1fr); }
+}
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+  .wrap { padding: 0 16px; }
+  .top nav { gap: 12px; }
+  .top nav a { font-size: 14px; }
+  .themes { grid-template-columns: 1fr 1fr; gap: 10px; }
+}
