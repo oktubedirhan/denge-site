@@ -2,6 +2,7 @@
 <html lang="tr">
 <head>
   <meta charset="utf-8">
+  <script>document.documentElement.classList.add("js")</script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Denge — ekran süreni kazan</title>
   <meta name="description" content="Denge, telefonda geçirdiğin süreyi okuyarak ve çalışarak kazandığın süreyle dengeleyen bir iPhone uygulaması. Geliştirme aşamasında.">
@@ -94,41 +95,43 @@
         <div class="section-head">
           <p class="kicker">Temalar</p>
           <h2>Beş tema, her biri kendi dünyası.</h2>
-          <p>Bir temaya dokun, uygulama ona bürünsün. Tema yalnızca görünümü değiştirir; bakiye, görev ve
+          <p>Bir temaya dokun, uygulama o temayla açılsın. Tema yalnızca görünümü değiştirir; bakiye, görev ve
             kayıtların aynı kalır.</p>
         </div>
-        <div class="themes" role="tablist" aria-label="Temalar">
-          <button class="theme" type="button" role="tab" id="tab-cini" data-theme="cini"
-                  aria-controls="tema-sahne" aria-selected="true" tabindex="0">
+        <div class="themes" id="tema-kartlar">
+          <button class="theme" type="button" data-theme="cini" aria-controls="tema-sahne" aria-expanded="false">
             <span class="art" style="background:#FFFFFF"><img src="img/theme-hero-cini.svg" alt="" loading="lazy"></span>
             <strong>Çini</strong><span class="sub">Bugünün çinisi</span>
           </button>
-          <button class="theme" type="button" role="tab" id="tab-cinar" data-theme="cinar"
-                  aria-controls="tema-sahne" aria-selected="false" tabindex="-1">
+          <button class="theme" type="button" data-theme="cinar" aria-controls="tema-sahne" aria-expanded="false">
             <span class="art" style="background:#DCEBE4"><img src="img/theme-hero-cinar.svg" alt="" loading="lazy"></span>
             <strong>Çınar</strong><span class="sub">Çınarın gölgesinde</span>
           </button>
-          <button class="theme" type="button" role="tab" id="tab-ebru" data-theme="ebru"
-                  aria-controls="tema-sahne" aria-selected="false" tabindex="-1">
+          <button class="theme" type="button" data-theme="ebru" aria-controls="tema-sahne" aria-expanded="false">
             <span class="art" style="background:#E4DCCB"><img src="img/theme-hero-ebru.svg" alt="" loading="lazy"></span>
             <strong>Ebru</strong><span class="sub">Bugünün teknesi</span>
           </button>
-          <button class="theme" type="button" role="tab" id="tab-mahalle" data-theme="mahalle"
-                  aria-controls="tema-sahne" aria-selected="false" tabindex="-1">
+          <button class="theme" type="button" data-theme="mahalle" aria-controls="tema-sahne" aria-expanded="false">
             <span class="art" style="background:#DCE8EE"><img src="img/theme-hero-mahalle.svg" alt="" loading="lazy"></span>
             <strong>Mahalle</strong><span class="sub">Sokağın bugün</span>
           </button>
-          <button class="theme" type="button" role="tab" id="tab-vapur" data-theme="vapur"
-                  aria-controls="tema-sahne" aria-selected="false" tabindex="-1">
+          <button class="theme" type="button" data-theme="vapur" aria-controls="tema-sahne" aria-expanded="false">
             <span class="art" style="background:#9CC3DE"><img src="img/theme-hero-vapur.svg" alt="" loading="lazy"></span>
             <strong>Vapur</strong><span class="sub">Güvertede bugün</span>
           </button>
         </div>
 
-        <div class="stage" id="tema-sahne" role="tabpanel" aria-labelledby="tab-cini" data-theme="cini">
+        <div class="stage" id="tema-sahne" data-theme="cini" role="region" aria-label="Seçili tema">
+          <div class="stage-bar">
+            <button class="stage-back" type="button">← Tüm temalar</button>
+            <div class="stage-arrows">
+              <button class="stage-prev" type="button" aria-label="Önceki tema">‹</button>
+              <button class="stage-next" type="button" aria-label="Sonraki tema">›</button>
+            </div>
+          </div>
           <div class="stage-text">
-            <p class="stage-kicker">Seçili tema</p>
-            <h3 class="stage-title" aria-live="polite">Çini</h3>
+            <p class="stage-kicker">Tema</p>
+            <h3 class="stage-title" tabindex="-1">Çini</h3>
             <dl class="stage-names">
               <div><dt>Bugün</dt><dd data-key="today">Bugünün çinisi</dd></div>
               <div><dt>Kazan</dt><dd data-key="earn">Fırçanı seç</dd></div>

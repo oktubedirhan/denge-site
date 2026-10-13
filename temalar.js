@@ -1,6 +1,8 @@
-// Temalar bölümü: kart seçilince alttaki sahne ve telefon ekranı o temaya geçer.
+// Temalar bölümü: bir karta basılınca kartlar gizlenir, yalnızca o tema açılır.
+// "Tüm temalar" kartlara döner; oklar sıradaki/önceki temaya geçer.
 // Ekran adları uygulamadaki ThemeCatalog.swift ile aynı.
 (function () {
+  var order = ["cini", "cinar", "ebru", "mahalle", "vapur"];
   var names = {
     cini:    { name: "Çini",    today: "Bugünün çinisi",     earn: "Fırçanı seç",       focus: "Fırın",          progress: "Pano" },
     cinar:   { name: "Çınar",   today: "Çınarın gölgesinde", earn: "Çınarını sula",     focus: "Kökler",         progress: "Bahçe" },
@@ -9,14 +11,16 @@
     vapur:   { name: "Vapur",   today: "Güvertede bugün",    earn: "Martılara simit",   focus: "Kaptan köşkü",   progress: "Rota" }
   };
 
-  var tabs = Array.prototype.slice.call(document.querySelectorAll('.themes [role="tab"]'));
+  var cards = document.getElementById("tema-kartlar");
   var stage = document.getElementById("tema-sahne");
-  if (!tabs.length || !stage) return;
+  if (!cards || !stage) return;
+  var buttons = Array.prototype.slice.call(cards.querySelectorAll(".theme"));
   var title = stage.querySelector(".stage-title");
   var screens = Array.prototype.slice.call(stage.querySelectorAll(".screens img"));
   var fields = Array.prototype.slice.call(stage.querySelectorAll("[data-key]"));
+  var current = null;
 
-  // Ekran görüntüleri ilk seçimde gecikmesin diye bölüm görünür olunca hepsi yüklenir.
+  // Ekranlar ilk açılışta gecikmesin diye bölüm yaklaşınca hepsi yüklenir.
   if ("IntersectionObserver" in window) {
     var io = new IntersectionObserver(function (entries) {
       if (entries.some(function (e) { return e.isIntersecting; })) {
@@ -24,43 +28,60 @@
         io.disconnect();
       }
     }, { rootMargin: "400px" });
-    io.observe(stage);
+    io.observe(cards);
   }
 
-  function select(tab, moveFocus) {
-    var id = tab.getAttribute("data-theme");
+  function show(id) {
     var data = names[id];
-    if (!data || stage.getAttribute("data-theme") === id) {
-      if (moveFocus) tab.focus();
-      return;
-    }
-    tabs.forEach(function (t) {
-      var on = t === tab;
-      t.setAttribute("aria-selected", on ? "true" : "false");
-      t.tabIndex = on ? 0 : -1;
-    });
+    if (!data) return;
+    current = id;
     stage.setAttribute("data-theme", id);
-    stage.setAttribute("aria-labelledby", tab.id);
+    stage.setAttribute("aria-label", data.name + " teması");
     title.textContent = data.name;
     fields.forEach(function (dd) { dd.textContent = data[dd.getAttribute("data-key")]; });
     screens.forEach(function (img) {
       img.classList.toggle("active", img.getAttribute("data-theme") === id);
     });
-    if (moveFocus) tab.focus();
   }
 
-  var canHover = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  function open(id) {
+    show(id);
+    buttons.forEach(function (b) { b.setAttribute("aria-expanded", "true"); });
+    cards.hidden = true;
+    stage.classList.add("open");
+    title.focus({ preventScroll: true });
+    var top = stage.getBoundingClientRect().top;
+    if (top < 0 || top > window.innerHeight * 0.4) stage.scrollIntoView({ block: "start", behavior: smooth() });
+  }
 
-  tabs.forEach(function (tab, i) {
-    tab.addEventListener("click", function () { select(tab, false); });
-    if (canHover) tab.addEventListener("mouseenter", function () { select(tab, false); });
-    tab.addEventListener("keydown", function (e) {
-      var next = null;
-      if (e.key === "ArrowRight" || e.key === "ArrowDown") next = tabs[(i + 1) % tabs.length];
-      else if (e.key === "ArrowLeft" || e.key === "ArrowUp") next = tabs[(i - 1 + tabs.length) % tabs.length];
-      else if (e.key === "Home") next = tabs[0];
-      else if (e.key === "End") next = tabs[tabs.length - 1];
-      if (next) { e.preventDefault(); select(next, true); }
-    });
+  function close() {
+    var last = current;
+    stage.classList.remove("open");
+    cards.hidden = false;
+    buttons.forEach(function (b) { b.setAttribute("aria-expanded", "false"); });
+    var back = cards.querySelector('[data-theme="' + last + '"]');
+    if (back) back.focus({ preventScroll: true });
+    cards.scrollIntoView({ block: "nearest", behavior: smooth() });
+  }
+
+  function step(delta) {
+    var i = order.indexOf(current);
+    show(order[(i + delta + order.length) % order.length]);
+  }
+
+  function smooth() {
+    return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+  }
+
+  buttons.forEach(function (b) {
+    b.addEventListener("click", function () { open(b.getAttribute("data-theme")); });
+  });
+  stage.querySelector(".stage-back").addEventListener("click", close);
+  stage.querySelector(".stage-prev").addEventListener("click", function () { step(-1); });
+  stage.querySelector(".stage-next").addEventListener("click", function () { step(1); });
+  stage.addEventListener("keydown", function (e) {
+    if (e.key === "Escape") { e.preventDefault(); close(); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); step(1); }
+    else if (e.key === "ArrowLeft") { e.preventDefault(); step(-1); }
   });
 })();
